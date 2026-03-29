@@ -9,9 +9,10 @@ __pycache__/
 dist/
 build/
 .venv/
-customOCR/
+customOCR/easyOCRstuff/
 # But keep the CRNN model weight needed for deployment
-!customOCR/crnn_last (1).pth
+# !customOCR/crnn_last (1).pth
+customOCR/anveshanout (1).ipynb
 
 # ── Node / Next.js ──
 frontend/node_modules/
