@@ -35,7 +35,8 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 def _debug_dump(label: str, data: dict) -> None:
     """Pretty-print response JSON to terminal (base64 images truncated)."""
-    def _truncate(obj):
+    if not os.getenv("DEBUG_DUMP"):
+        return
         if isinstance(obj, dict):
             return {k: _truncate(v) for k, v in obj.items()}
         if isinstance(obj, list):

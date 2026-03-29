@@ -24,7 +24,7 @@ OCRmodel/
 yolo/best.pt
 
 # ── CircuitJS1 build artifacts ──
-circuitjs1/
+/circuitjs1/
 # Keep circuitjs static files for frontend deployment
 # frontend/public/circuitjs/
 
