@@ -1,0 +1,11 @@
+Image: crossover
+OCR Mode: TrOCR (Slow/Accurate)
+Text boxes found: 7
+
+  [0] text="0.5�H"  confidence=0.9590  bbox=[1279, 599, 1583, 732]
+  [1] text="1V"  confidence=0.0000  bbox=[36, 602, 164, 699]
+  [2] text="1�F"  confidence=0.0000  bbox=[860, 20, 1056, 131]
+  [3] text="1Ω"  confidence=0.0000  bbox=[466, 321, 615, 385]
+  [4] text="0.3H"  confidence=0.0001  bbox=[523, 77, 730, 163]
+  [5] text="1Ω"  confidence=0.0000  bbox=[889, 564, 1076, 652]
+  [6] text="1Ω"  confidence=0.0000  bbox=[1253, 250, 1423, 332]

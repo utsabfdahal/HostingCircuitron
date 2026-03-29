@@ -1,0 +1,109 @@
+============================================================
+  CircuitJS (CJS) Netlist Format — Reference for DeepSeek
+============================================================
+
+OVERVIEW
+--------
+Each line in a CJS netlist describes one circuit element.
+The simulator reads these lines to reconstruct the full
+schematic, including component placement, wiring, and values.
+
+
+LINE FORMAT
+-----------
+  <type> <x1> <y1> <x2> <y2> <flags> [param1] [param2] ...
+
+  • type   — Element type code (see table below).
+  • x1,y1  — Start terminal coordinates (on a 16-px grid).
+  • x2,y2  — End terminal coordinates.
+  • flags  — Bit-field for display options:
+               bit 0 (1)  = show current dots
+               bit 4 (16) = show voltage/values
+  • params — Element-specific values (resistance, capacitance, etc.)
+
+
+ELEMENT TYPE CODES
+------------------
+  Code  Element               Key params (after flags)
+  ----  --------------------  --------------------------------
+  w     Wire                  (none)
+  r     Resistor              resistance (ohms)
+  c     Capacitor             capacitance (farads)
+  l     Inductor              inductance (henrys)
+  v     Voltage Source (DC)    waveform(0=DC), maxV
+  v     Voltage Source (AC)    waveform(1=AC), maxV, frequency
+  i     Current Source         current (amps)
+  d     Diode                 fwdrop, (model params)
+  z     Zener Diode           fwdrop, zvoltage
+  t     NPN BJT               flags, beta
+  T     PNP BJT               flags, beta (same as NPN, uses 'T')
+  f     N-MOSFET              flags, vt (threshold)
+  F     P-MOSFET              flags, vt
+  j     N-JFET                flags
+  J     P-JFET                flags
+  a     Op-Amp                maxOut, minOut, gain
+  I     Current source (alt)  current
+  s     SPST Switch           (none, position in flags)
+  S     SPDT Switch           (none, link in flags)
+  g     Ground                (none)
+  R     Voltage Rail          voltage
+  p     Probe                 (none, shows voltage at point)
+  O     Output                (shows voltage)
+  L     Logic Input           (none)
+  M     Logic Output          (none)
+  x     Text label            (none — text follows on next line)
+  172   Potentiometer         resistance, position(0-1)
+  38    Labelled Node         (label text follows)
+
+
+SPECIAL LINES
+-------------
+  $ <flags> <timeStep> <iterCount> <currentBarValue>
+      <voltageRange> <powerBarValue> <minTimeStep>
+
+    — Global simulation options.  Always the first line.
+    — flags bits:
+        0 = show dots
+        2 = show voltage (inverted: 0 = show)
+        4 = show values  (inverted: 0 = show)
+        6 = adjust time step
+
+  o <params...>
+    — Oscilloscope / scope configuration.
+
+  38 <x1> <y1> <x2> <y2> 0 <label-text>
+    — Places a text label on the schematic (e.g. node name).
+
+
+EXAMPLE NETLIST
+---------------
+  $ 1 0.000005 10.634267539816555 50 5 43 5e-11
+  v 192 336 192 176 16 5 40 0 0 0.5
+  r 192 176 400 176 0 1000
+  c 400 176 400 336 0 0.000001 0
+  w 400 336 192 336 0
+  38 192 144 192 128 0 V1 5V
+  38 352 160 400 160 0 R1 1kΩ
+  38 416 240 432 240 0 C1 1µF
+
+  Reads as:
+    • V1: 5 V DC source from (192,336) to (192,176)
+    • R1: 1 kΩ resistor from (192,176) to (400,176)
+    • C1: 1 µF capacitor from (400,176) to (400,336)
+    • Wire connecting C1 bottom to V1 bottom
+
+
+WHAT GETS SENT TO DEEPSEEK
+--------------------------
+1. System prompt: EE assistant identity + CJS format reference.
+2. Circuit summary: Component list with values, full connection
+   topology (component terminal → node mappings), wire segments.
+3. CJS netlist: The raw text block (exactly as above).
+4. User message: The user's question.
+5. History: Last 6 messages for conversational context.
+
+This gives DeepSeek complete knowledge of:
+  - What components exist and their values
+  - How everything is wired (topology)
+  - Exact coordinates / layout
+  - User's conversational context

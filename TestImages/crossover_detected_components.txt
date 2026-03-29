@@ -1,0 +1,42 @@
+Image: crossover
+Image size: 1680 x 1084
+Total detections: 24
+  Components: 8
+  Text boxes: 7
+  Junctions/Crossovers/Terminals: 9
+
+--- All Detections ---
+  [0] text                       conf=0.9477  bbox=[1279, 599, 1583, 732]
+  [1] inductor                   conf=0.9356  bbox=[463, 168, 698, 251]
+  [2] voltage                    conf=0.9233  bbox=[225, 574, 428, 737]
+  [3] resistor                   conf=0.9212  bbox=[441, 406, 583, 481]
+  [4] text                       conf=0.9117  bbox=[36, 602, 164, 699]
+  [5] text                       conf=0.9063  bbox=[860, 20, 1056, 131]
+  [6] resistor                   conf=0.9014  bbox=[775, 496, 862, 711]
+  [7] text                       conf=0.9002  bbox=[466, 321, 615, 385]
+  [8] text                       conf=0.8994  bbox=[523, 77, 730, 163]
+  [9] text                       conf=0.8973  bbox=[889, 564, 1076, 652]
+  [10] capacitor                  conf=0.8910  bbox=[842, 132, 947, 270]
+  [11] gnd                        conf=0.8863  bbox=[768, 939, 954, 1051]
+  [12] inductor                   conf=0.8824  bbox=[1169, 501, 1266, 775]
+  [13] text                       conf=0.8808  bbox=[1253, 250, 1423, 332]
+  [14] resistor                   conf=0.8500  bbox=[1107, 234, 1203, 360]
+  [15] junction                   conf=0.7873  bbox=[747, 188, 788, 229]
+  [16] junction                   conf=0.7813  bbox=[278, 208, 318, 251]
+  [17] junction                   conf=0.7650  bbox=[1197, 835, 1244, 880]
+  [18] junction                   conf=0.7633  bbox=[291, 431, 334, 474]
+  [19] junction                   conf=0.7546  bbox=[1132, 158, 1179, 202]
+  [20] junction                   conf=0.7431  bbox=[817, 832, 869, 882]
+  [21] junction                   conf=0.7408  bbox=[1147, 411, 1185, 449]
+  [22] junction                   conf=0.6971  bbox=[313, 821, 364, 871]
+  [23] crossover                  conf=0.6107  bbox=[739, 364, 868, 460]
+
+--- Components Only ---
+  [0] inductor                   conf=0.9356  bbox=[463, 168, 698, 251]
+  [1] voltage                    conf=0.9233  bbox=[225, 574, 428, 737]
+  [2] resistor                   conf=0.9212  bbox=[441, 406, 583, 481]
+  [3] resistor                   conf=0.9014  bbox=[775, 496, 862, 711]
+  [4] capacitor                  conf=0.8910  bbox=[842, 132, 947, 270]
+  [5] gnd                        conf=0.8863  bbox=[768, 939, 954, 1051]
+  [6] inductor                   conf=0.8824  bbox=[1169, 501, 1266, 775]
+  [7] resistor                   conf=0.8500  bbox=[1107, 234, 1203, 360]

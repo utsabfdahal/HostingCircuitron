@@ -1,0 +1,11 @@
+Image: crossover
+OCR Mode: Custom CRNN (Fast)
+Text boxes found: 7
+
+  [0] text="0.SµH"  confidence=0.8421  bbox=[1279, 599, 1583, 732]
+  [1] text="1V"  confidence=0.9983  bbox=[36, 602, 164, 699]
+  [2] text="1µF"  confidence=0.9308  bbox=[860, 20, 1056, 131]
+  [3] text="2Ω"  confidence=0.9955  bbox=[466, 321, 615, 385]
+  [4] text="D.3H"  confidence=0.8450  bbox=[523, 77, 730, 163]
+  [5] text="1Ω"  confidence=0.9967  bbox=[889, 564, 1076, 652]
+  [6] text="1Ω"  confidence=0.9908  bbox=[1253, 250, 1423, 332]

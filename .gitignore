@@ -1,0 +1,43 @@
+# ── Secrets ──
+.env
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+customOCR/
+# But keep the CRNN model weight needed for deployment
+!customOCR/crnn_last (1).pth
+
+# ── Node / Next.js ──
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# ── Model weights (large binaries) ──
+OCRmodel/
+yolo/best.pt
+
+# ── CircuitJS1 build artifacts ──
+circuitjs1/
+# Keep circuitjs static files for frontend deployment
+# frontend/public/circuitjs/
+
+# ── YOLO runs / inference outputs ──
+yolo/yolov7/runs/
+
+# ── IDE / OS ──
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Misc ──
+*.log
+test_cjs.py

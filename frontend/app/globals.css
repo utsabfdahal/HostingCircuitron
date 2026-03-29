@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent scrollbar flash on the full-screen workspace */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #111116;
+}
+
+/* Toast slide-up animation */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.25s ease-out;
+}
+
+/* Custom scrollbar for sidebar */
+aside::-webkit-scrollbar {
+  width: 6px;
+}
+aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+aside::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+aside::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Select dropdown dark theme */
+select option {
+  background: #1a1a2e;
+  color: #e5e7eb;
+}
+
+/* Smooth focus ring */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-radius: 4px;
+}
+
+/* Compact prose for chat bubbles */
+.prose.prose-sm h1,
+.prose.prose-sm h2,
+.prose.prose-sm h3 {
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  font-size: 0.875rem;
+}
+.prose.prose-sm p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+.prose.prose-sm ul,
+.prose.prose-sm ol {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding-left: 1.25em;
+}
+.prose.prose-sm li {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+.prose.prose-sm code {
+  font-size: 0.8em;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15em 0.3em;
+  border-radius: 3px;
+}
+.prose.prose-sm pre {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  padding: 0.5em 0.75em;
+  margin: 0.5em 0;
+}
