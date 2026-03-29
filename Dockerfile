@@ -24,4 +24,6 @@ RUN pip uninstall -y opencv-python || true && \
 
 COPY . .
 
-CMD ["sh", "-c", "uvicorn test.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+RUN chmod +x start_server.sh
+
+CMD ["./start_server.sh"]
