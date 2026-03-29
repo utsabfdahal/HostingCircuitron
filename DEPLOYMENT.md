@@ -5,7 +5,7 @@
 | Layer    | Service | What it runs |
 |----------|---------|--------------|
 | Frontend | **Vercel** (free tier) | Next.js 14 app (`frontend/`) |
-| Backend  | **Render** (starter or free tier) | FastAPI + YOLO + CRNN OCR (`test/`) |
+| Backend  | **Railway** (hobby plan) | FastAPI + YOLO + CRNN OCR (`test/`) |
 
 TrOCR (the "slow" 1.2 GB model) is **excluded** from deployment. Only the fast CRNN OCR (32 MB) is used in production.
 
@@ -13,9 +13,9 @@ TrOCR (the "slow" 1.2 GB model) is **excluded** from deployment. Only the fast C
 
 ## Prerequisites
 
-1. Push your repo to GitHub (it's already at `git@github.com:utsabfdahal/FinalCodeofCircuitron.git`)
+1. Push your repo to GitHub (`git@github.com:utsabfdahal/HostingCircuitron.git`)
 2. Ensure the CRNN model and CircuitJS files are committed (see "Before You Push" below)
-3. Accounts on [Vercel](https://vercel.com) and [Render](https://render.com)
+3. Accounts on [Vercel](https://vercel.com) and [Railway](https://railway.app)
 
 ---
 
@@ -37,65 +37,117 @@ git push origin main
 
 ---
 
-## Step 1: Deploy Backend on Render
+## Step 1: Deploy Backend on Railway
 
-### Option A: One-click (render.yaml)
+### 1.1 Create a Railway Account
 
-1. Go to [Render Dashboard](https://dashboard.render.com)
-2. Click **New** → **Blueprint**
-3. Connect your GitHub repo
-4. Render reads `render.yaml` and auto-configures the service
-5. Set the `LIGHTNING_AI_API_KEY` env var in the dashboard
+1. Go to [railway.app](https://railway.app)
+2. Click **"Login"** → Sign in with **GitHub**
 
-### Option B: Manual setup
+### 1.2 Create a New Project
 
-1. Click **New** → **Web Service**
-2. Connect your GitHub repo
-3. Configure:
-   - **Name**: `circuitron-api`
-   - **Runtime**: Python
-   - **Build Command**: `pip install -r requirements-deploy.txt`
-   - **Start Command**: `uvicorn test.main:app --host 0.0.0.0 --port $PORT`
-4. Under **Environment**:
-   - `PYTHON_VERSION` = `3.11`
-   - `LIGHTNING_AI_API_KEY` = your key from `.env`
-   - `ALLOWED_ORIGINS` = `https://your-app.vercel.app` (set after Vercel deploy)
-5. Click **Deploy**
+1. Click **"New Project"**
+2. Select **"Deploy from GitHub Repo"**
+3. Find and select **`utsabfdahal/HostingCircuitron`**
+4. Click **"Deploy Now"**
 
-### Important Notes
+### 1.3 Configure Environment Variables
 
-- **Plan**: The free tier has 512 MB RAM. YOLOv7 + CRNN needs ~1–2 GB. Use the **Starter plan** ($7/mo) or higher.
-- **Disk**: Model files are committed to git so Render gets them automatically. No persistent disk needed.
-- **Cold starts**: Free tier spins down after inactivity. First request takes ~30–60s to load models.
-- **PyTorch CPU**: `requirements-deploy.txt` pins `torch` CPU-only to keep the image smaller (~200 MB vs 2 GB with CUDA).
+Railway will start building immediately. While it builds:
 
-### Verify Backend
+1. Click on your service (the purple box)
+2. Go to the **"Variables"** tab
+3. Add these variables:
 
-Once deployed, visit: `https://circuitron-api.onrender.com/docs` — you should see the FastAPI Swagger UI.
+| Variable | Value |
+|----------|-------|
+| `LIGHTNING_AI_API_KEY` | Your Lightning AI key from `.env` |
+| `ALLOWED_ORIGINS` | `*` (update to your Vercel domain later) |
+
+### 1.4 Set the Install Command
+
+1. Go to the **"Settings"** tab on your service
+2. Under **Build**, set **Install Command** to:
+   ```
+   pip install -r requirements-deploy.txt
+   ```
+   This uses the slimmed-down deps without TrOCR — faster builds, smaller image.
+
+### 1.5 Wait for Deployment
+
+- Watch the **"Deployments"** tab for build logs
+- Once it says **"Active"**, your API is live
+
+### 1.6 Get Your Public URL
+
+1. Go to **"Settings"** tab
+2. Under **"Networking"** → **"Public Networking"**
+3. Click **"Generate Domain"**
+4. Railway gives you a URL like:
+   ```
+   https://hostingcircuitron-production.up.railway.app
+   ```
+
+### 1.7 Verify Backend
+
+Open in your browser:
+```
+https://hostingcircuitron-production.up.railway.app/docs
+```
+You should see the FastAPI Swagger UI.
+
+### Railway Plan Info
+
+| Feature | Detail |
+|---------|--------|
+| **Trial** | $5 free credit, no credit card needed |
+| **Hobby plan** | $5/month + usage-based |
+| **RAM** | Up to 8 GB available |
+| **Cold starts** | None on Hobby plan |
+| **Auto-deploy** | On every `git push` |
+| **PyTorch** | CPU-only via `requirements-deploy.txt` (~200 MB vs 2 GB CUDA) |
 
 ---
 
 ## Step 2: Deploy Frontend on Vercel
 
+### 2.1 Create the Project
+
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
-2. Click **Add New** → **Project**
-3. Import your GitHub repo
-4. Configure:
-   - **Framework Preset**: Next.js (auto-detected)
-   - **Root Directory**: `frontend`
-   - **Build Command**: `npm run build` (default)
-   - **Output Directory**: `.next` (default)
-5. Under **Environment Variables**, add:
-   ```
-   NEXT_PUBLIC_API_URL = https://circuitron-api.onrender.com
-   ```
-   (Replace with your actual Render URL)
-6. Click **Deploy**
+2. Click **"Add New"** → **"Project"**
+3. Import your GitHub repo (`HostingCircuitron`)
 
-### After Vercel Deploy
+### 2.2 Configure Build Settings
 
-Copy your Vercel URL (e.g. `https://circuitron.vercel.app`) and go back to Render:
-- Update `ALLOWED_ORIGINS` env var to: `https://circuitron.vercel.app`
+| Setting | Value |
+|---------|-------|
+| **Framework Preset** | Next.js (auto-detected) |
+| **Root Directory** | `frontend` |
+| **Build Command** | `npm run build` (default) |
+| **Output Directory** | `.next` (default) |
+
+### 2.3 Set Environment Variables
+
+Add this under **Environment Variables**:
+
+```
+NEXT_PUBLIC_API_URL = https://hostingcircuitron-production.up.railway.app
+```
+*(Replace with your actual Railway URL from Step 1.6)*
+
+### 2.4 Deploy
+
+Click **"Deploy"** and wait for the build to complete.
+
+### 2.5 Link CORS
+
+After Vercel deploys, copy your Vercel URL (e.g. `https://circuitron.vercel.app`) and go back to Railway:
+
+1. Open your service → **"Variables"** tab
+2. Update `ALLOWED_ORIGINS` to your Vercel domain:
+   ```
+   ALLOWED_ORIGINS = https://circuitron.vercel.app
+   ```
 
 ---
 
@@ -103,7 +155,7 @@ Copy your Vercel URL (e.g. `https://circuitron.vercel.app`) and go back to Rende
 
 1. Open your Vercel URL
 2. Upload a circuit image
-3. The frontend calls `NEXT_PUBLIC_API_URL/analyze` → Render backend
+3. The frontend calls `NEXT_PUBLIC_API_URL/analyze` → Railway backend
 4. Backend runs YOLO detection + CRNN OCR + line detection
 5. Results appear in the review step
 
@@ -111,17 +163,18 @@ Copy your Vercel URL (e.g. `https://circuitron.vercel.app`) and go back to Rende
 
 ## Environment Variables Summary
 
-### Backend (Render)
+### Backend (Railway)
+
 | Variable | Value | Required |
 |----------|-------|----------|
-| `PYTHON_VERSION` | `3.11` | Yes |
 | `LIGHTNING_AI_API_KEY` | Your Lightning AI key | Yes (for chat) |
 | `ALLOWED_ORIGINS` | `https://your-app.vercel.app` | Recommended |
 
 ### Frontend (Vercel)
+
 | Variable | Value | Required |
 |----------|-------|----------|
-| `NEXT_PUBLIC_API_URL` | `https://circuitron-api.onrender.com` | Yes |
+| `NEXT_PUBLIC_API_URL` | `https://your-app.up.railway.app` | Yes |
 
 ---
 
@@ -130,16 +183,16 @@ Copy your Vercel URL (e.g. `https://circuitron.vercel.app`) and go back to Rende
 | Problem | Fix |
 |---------|-----|
 | `ModuleNotFoundError: transformers` | Expected — TrOCR is excluded. Ensure `ocr_mode=fast` in frontend. |
-| CORS errors in browser console | Set `ALLOWED_ORIGINS` on Render to your Vercel domain |
-| Backend OOM / crashes | Upgrade Render plan (YOLOv7 needs ~1 GB RAM) |
+| CORS errors in browser console | Set `ALLOWED_ORIGINS` on Railway to your Vercel domain |
+| Backend OOM / crashes | Railway supports up to 8 GB — should not happen |
 | Models not found | Ensure `yolov7new/best.pt` and `customOCR/crnn_last (1).pth` are committed |
 | CircuitJS simulation page blank | Ensure `frontend/public/circuitjs/` is committed |
-| Slow first request | Render free tier cold-starts; upgrade to Starter to keep alive |
+| Build too slow | `requirements-deploy.txt` uses CPU-only PyTorch to speed up builds |
 
 ---
 
 ## Optional: Custom Domain
 
 - **Vercel**: Settings → Domains → Add your domain
-- **Render**: Settings → Custom Domains → Add domain
+- **Railway**: Settings → Custom Domains → Add domain
 - Update `NEXT_PUBLIC_API_URL` and `ALLOWED_ORIGINS` accordingly
