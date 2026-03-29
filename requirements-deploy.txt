@@ -1,6 +1,7 @@
-# CIRCUITRON – Deployment requirements (Render)
+# CIRCUITRON – Deployment requirements (Railway)
 # TrOCR / transformers excluded to keep image small and deploy fast.
 # Only "fast" OCR mode (custom CRNN) is available in production.
+# NOTE: opencv-python-headless must come AFTER ultralytics to override it.
 
 # PyTorch CPU-only (much smaller than CUDA builds)
 --extra-index-url https://download.pytorch.org/whl/cpu
@@ -26,7 +27,6 @@ Jinja2==3.1.6
 kiwisolver==1.4.9
 matplotlib==3.10.8
 numpy==2.4.2
-opencv-python-headless==4.13.0.92
 packaging==26.0
 pillow==12.1.1
 pydantic==2.12.5
@@ -39,7 +39,9 @@ scikit-image==0.26.0
 scipy==1.17.1
 starlette==0.52.1
 typing_extensions==4.15.0
-ultralytics
+ultralytics==8.4.31
 urllib3==2.6.3
 uvicorn==0.41.0
 gunicorn==23.0.0
+# Must be last — overrides opencv-python pulled in by ultralytics
+opencv-python-headless==4.13.0.92
